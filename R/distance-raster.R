@@ -53,14 +53,17 @@
 #' library(sf)
 #'
 #' # Load nc data
-#' nc <- st_read(system.file("shapes/sids.shp", package="spData"))
-#' st_crs(nc) <- "+proj=longlat +datum=NAD27"
+#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' # Select first 5 of nc
 #' ncsub <- nc[1:5,]
 #'
-#' # Generate a distance raster from some of nc within extent of all of nc
-#' distance_raster(ncsub, 0.1, st_bbox(nc), measure = 'geodesic')
+#'
+#' # Note: package 'fasterize' required for distance_raster
+#' if (require(fasterize, quietly = TRUE)) {
+#'   # Generate a distance raster from some of nc within extent of all of nc
+#'   distance_raster(ncsub, 0.1, st_bbox(nc), measure = 'geodesic')
+#' }
 distance_raster <- function(y, cellsize, extent = NULL, expand = NULL,
 														measure = NULL, check = TRUE) {
 	if (!requireNamespace('fasterize', quietly = TRUE)) {
@@ -68,7 +71,7 @@ distance_raster <- function(y, cellsize, extent = NULL, expand = NULL,
 				 call. = FALSE)
 	}
 
-	if (!is.null(extent) & class(extent) != 'bbox') {
+	if (!is.null(extent) & !inherits(extent, 'bbox')) {
 		stop('extent must be of class bbox from sf::st_bbox')
 	}
 

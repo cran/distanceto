@@ -32,23 +32,25 @@
 #' library(sf)
 #'
 #' # Load nc data
-#' nc <- st_read(system.file("shapes/sids.shp", package="spData"))
-#' st_crs(nc) <- "+proj=longlat +datum=NAD27"
+#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' # Set number of sampling points
 #' npts <- 1e3
 #'
-#' # Sample points in nc
-#' ncpts <- st_sample(nc, npts)
+#' # Note: package 'lwgeom' required for st_sample
+#' if (require(lwgeom, quietly = TRUE)) {
+#'   # Sample points in nc
+#'   ncpts <- st_sample(nc, npts)
 #'
-#' # Select first 5 of nc
-#' ncsub <- nc[1:5,]
+#' 	# Select first 5 of nc
+#' 	ncsub <- nc[1:5,]
 #'
-#' # Measure distance from ncpts to first 5 of nc, printing result
-#' distance_to(ncpts, ncsub, measure = 'geodesic')
+#' 	# Measure distance from ncpts to first 5 of nc, printing result
+#' 	distance_to(ncpts, ncsub, measure = 'geodesic')
 #'
-#' # or add to ncpts
-#' ncpts$dist <- distance_to(ncpts, ncsub, measure = 'geodesic')
+#' 	# or add to ncpts
+#' 	ncpts$dist <- distance_to(ncpts, ncsub, measure = 'geodesic')
+#' }
 distance_to <- function(x, y, measure = NULL) {
 	if (missing(x)) stop('x must be provided')
 	if (missing(y)) stop('y must be provided')

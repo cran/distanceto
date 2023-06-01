@@ -71,12 +71,15 @@ and max XY of the bounding box to generate a larger surface.
 library(sf)
 
 # Load nc data
-nc <- st_read(system.file("shapes/sids.shp", package="spData"))
-st_crs(nc) <- "+proj=longlat +datum=NAD27"
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
 
 # Select first 5 of nc
 ncsub <- nc[1:5,]
 
-# Generate a distance raster from some of nc within extent of all of nc
-distance_raster(ncsub, 0.1, st_bbox(nc), measure = 'geodesic')
+
+# Note: package 'fasterize' required for distance_raster
+if (require(fasterize, quietly = TRUE)) {
+  # Generate a distance raster from some of nc within extent of all of nc
+  distance_raster(ncsub, 0.1, st_bbox(nc), measure = 'geodesic')
+}
 }
